@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../utils/client.dart';
-import 'browser/constants.dart';
 import 'browser/error_builder.dart';
 import 'browser/navigation_controller.dart';
 import 'toolbar.dart';
@@ -17,41 +16,47 @@ class Browser extends StatefulWidget {
 
 class _BrowserState extends State<Browser> {
   late final NavigationController _navController;
+  late final OdinClient _client;
   String _content = '';
   String _addr = '';
-  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _navController = NavigationController(widget.history);
+    _client = OdinClient();
+  }
+
+  @override
+  void dispose() {
+    _client.dispose();
+    super.dispose();
   }
 
   Future<void> navigate(String url, bool modifyHistory) async {
-    setState(() => _isLoading = true);
 
     try {
-      final res = await OdinClient.preflight(url);
+      final status = await _client.preflight(url);
       String newContent;
 
-      switch (res) {
-        case BrowserConstants.responseSuccess:
+      switch (status) {
+        case PreflightStatus.ok:
           try {
-            newContent = await OdinClient.pull(url);
+            newContent = await _client.pull(url);
           } catch (e) {
             newContent = ErrorBuilder.buildServerError();
           }
           break;
 
-        case BrowserConstants.responseNotFound:
+        case PreflightStatus.notFound:
           newContent = ErrorBuilder.buildNotFoundError();
           break;
 
-        case BrowserConstants.responseMalformed:
+        case PreflightStatus.serverError:
           newContent = ErrorBuilder.buildMalformedError();
           break;
 
-        default:
+        case PreflightStatus.clientError:
           newContent = ErrorBuilder.buildServerError();
           break;
       }
@@ -59,7 +64,6 @@ class _BrowserState extends State<Browser> {
       setState(() {
         _content = newContent;
         _addr = url;
-        _isLoading = false;
       });
 
       if (modifyHistory) {
@@ -69,7 +73,6 @@ class _BrowserState extends State<Browser> {
       setState(() {
         _content = ErrorBuilder.buildServerError();
         _addr = url;
-        _isLoading = false;
       });
     }
   }
