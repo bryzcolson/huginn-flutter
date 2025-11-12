@@ -12,6 +12,7 @@ class ToolbarConstants {
   static const String backTooltip = 'Back';
   static const String forwardTooltip = 'Forward';
   static const String refreshTooltip = 'Refresh';
+  static const String goTooltip = 'Go';
 
   // Placeholder text
   static const String addressBarHint = 'Enter Odin URL';
@@ -20,4 +21,5 @@ class ToolbarConstants {
   static const IconData backIcon = Icons.arrow_back;
   static const IconData forwardIcon = Icons.arrow_forward;
   static const IconData refreshIcon = Icons.refresh;
+  static const IconData goIcon = Icons.flight_takeoff;
 }

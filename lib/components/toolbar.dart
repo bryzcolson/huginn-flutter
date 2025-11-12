@@ -5,7 +5,7 @@ import 'toolbar/address_bar.dart';
 import 'toolbar/toolbar_button.dart';
 
 /// Main toolbar widget for browser navigation
-class Toolbar extends StatelessWidget {
+class Toolbar extends StatefulWidget {
   final String addr;
   final AddressChangedCallback onAddrChanged;
   final NavigationCallback onNavigate;
@@ -30,6 +30,42 @@ class Toolbar extends StatelessWidget {
   });
 
   @override
+  State<Toolbar> createState() => _ToolbarState();
+}
+
+class _ToolbarState extends State<Toolbar> {
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hasText = widget.addr.trim().isNotEmpty;
+  }
+
+  @override
+  void didUpdateWidget(Toolbar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.addr != oldWidget.addr) {
+      setState(() {
+        _hasText = widget.addr.trim().isNotEmpty;
+      });
+    }
+  }
+
+  void _handleAddressChanged(String address) {
+    setState(() {
+      _hasText = address.trim().isNotEmpty;
+    });
+    widget.onAddrChanged(address);
+  }
+
+  void _handleGo() {
+    if (_hasText) {
+      widget.onNavigate(widget.addr, true);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) => Container(
     height: ToolbarTheme.toolbarHeight,
     padding: ToolbarTheme.toolbarPadding,
@@ -41,26 +77,32 @@ class Toolbar extends StatelessWidget {
       children: [
         ToolbarButton(
           icon: ToolbarConstants.backIcon,
-          enabled: canBack,
-          onPressed: onBack,
+          enabled: widget.canBack,
+          onPressed: widget.onBack,
           tooltip: ToolbarConstants.backTooltip,
         ),
         ToolbarButton(
           icon: ToolbarConstants.forwardIcon,
-          enabled: canNext,
-          onPressed: onNext,
+          enabled: widget.canNext,
+          onPressed: widget.onNext,
           tooltip: ToolbarConstants.forwardTooltip,
         ),
         ToolbarButton(
           icon: ToolbarConstants.refreshIcon,
-          enabled: canRefresh,
-          onPressed: onRefresh,
+          enabled: widget.canRefresh,
+          onPressed: widget.onRefresh,
           tooltip: ToolbarConstants.refreshTooltip,
         ),
         AddressBar(
-          address: addr,
-          onAddressChanged: onAddrChanged,
-          onNavigate: onNavigate,
+          address: widget.addr,
+          onAddressChanged: _handleAddressChanged,
+          onNavigate: widget.onNavigate,
+        ),
+        ToolbarButton(
+          icon: ToolbarConstants.goIcon,
+          enabled: _hasText,
+          onPressed: _handleGo,
+          tooltip: ToolbarConstants.goTooltip,
         ),
       ],
     ),
