@@ -63,7 +63,8 @@ class RendererTheme {
   static const listVerticalPadding = EdgeInsets.symmetric(vertical: 8);
   static const listItemPadding = EdgeInsets.only(left: 16, bottom: 4);
   static const tableVerticalPadding = EdgeInsets.symmetric(vertical: 8);
-  static const tableCellPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 10);
+  static const tableCellPadding =
+      EdgeInsets.symmetric(horizontal: 20, vertical: 10);
   static const referencePadding = EdgeInsets.symmetric(vertical: 2);
 
   // Sizes

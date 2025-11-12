@@ -49,7 +49,8 @@ class _ToolbarButtonState extends State<ToolbarButton> {
             width: ToolbarTheme.buttonWidth,
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(ToolbarTheme.buttonBorderRadius),
+              borderRadius:
+                  BorderRadius.circular(ToolbarTheme.buttonBorderRadius),
             ),
             child: Center(
               child: Icon(

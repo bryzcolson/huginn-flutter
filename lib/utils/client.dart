@@ -22,10 +22,13 @@ class OdinProtocol {
 enum PreflightStatus {
   /// Content is ok
   ok('A'),
+
   /// Content not found
   notFound('B'),
+
   /// Server error
   serverError('C'),
+
   /// Client error
   clientError('D');
 
@@ -33,10 +36,10 @@ enum PreflightStatus {
   final String code;
 
   static PreflightStatus fromCode(String code) =>
-    PreflightStatus.values.firstWhere(
-      (status) => status.code == code,
-      orElse: () => PreflightStatus.clientError,
-    );
+      PreflightStatus.values.firstWhere(
+        (status) => status.code == code,
+        orElse: () => PreflightStatus.clientError,
+      );
 }
 
 /// Exception thrown when Odin client operations fail
@@ -90,8 +93,8 @@ class OdinClient {
   OdinClient({
     OdinClientConfig? config,
     Logger? logger,
-  }) : config = config ?? const OdinClientConfig(),
-    _logger = logger ?? Logger('OdinClient');
+  })  : config = config ?? const OdinClientConfig(),
+        _logger = logger ?? Logger('OdinClient');
 
   /// Parses a URL string into a URI, adding odin:// scheme if missing
   ///
@@ -114,11 +117,11 @@ class OdinClient {
 
   /// Extracts hostname from URI, defaulting to localhost if empty
   String _getHostname(Uri uri) =>
-    uri.host.isEmpty ? OdinProtocol.defaultHost : uri.host;
+      uri.host.isEmpty ? OdinProtocol.defaultHost : uri.host;
 
   /// Extracts path from URI, defaulting to / if empty
   String _getPath(Uri uri) =>
-    uri.path.isEmpty ? OdinProtocol.defaultPath : uri.path;
+      uri.path.isEmpty ? OdinProtocol.defaultPath : uri.path;
 
   /// Sends a command to the Odin server and returns the response
   ///
@@ -140,8 +143,8 @@ class OdinClient {
 
       // Build and send command
       final message = '${OdinProtocol.protocolPrefix}'
-        '${OdinProtocol.delimiter}$command'
-        '${OdinProtocol.delimiter}$path';
+          '${OdinProtocol.delimiter}$command'
+          '${OdinProtocol.delimiter}$path';
 
       _logger.fine('Sending command: $message');
       socket.write(message);
@@ -209,10 +212,8 @@ class OdinClient {
       );
 
       // Parse tab-delimited response
-      final parts = response
-        .split(OdinProtocol.delimiter)
-        .map((s) => s.trim())
-        .toList();
+      final parts =
+          response.split(OdinProtocol.delimiter).map((s) => s.trim()).toList();
 
       if (parts.length > 1) {
         final status = PreflightStatus.fromCode(parts[1]);

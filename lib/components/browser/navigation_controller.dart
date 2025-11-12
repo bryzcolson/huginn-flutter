@@ -4,7 +4,7 @@ class NavigationController {
   int _position = -1;
 
   NavigationController(List<String> initialHistory)
-    : _history = List.from(initialHistory);
+      : _history = List.from(initialHistory);
 
   /// Current position in history
   int get position => _position;

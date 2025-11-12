@@ -72,32 +72,31 @@ class _RendererState extends State<Renderer> {
 
   /// Factory method to create widgets from content elements
   Widget? _createWidget(ContentElement element) => switch (element) {
-    HeadingElement() => Heading(
-      text: element.text,
-      level: element.level,
-    ),
-    ParagraphElement() => Paragraph(text: element.text),
-    CodeBlockElement() => CodeBlock(text: element.text),
-    ReferenceElement() => Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Reference(
-          text: element.text,
-          url: element.url,
-          onTap: () => widget.navigate(element.url, true),
-        ),
-        const SizedBox(height: 4),
-      ],
-    ),
-    LineBreakElement() => const SizedBox(height: 8),
-    SeparatorElement() => const Divider(color: Colors.black),
-    UnorderedListElement() => UnorderedList(items: element.items),
-    OrderedListElement() => OrderedList(items: element.items),
-    TableElement() => ContentTable(element: element),
-    AnchorElement() => const SizedBox.shrink(),
-    TitleElement() =>
-      const SizedBox.shrink(), // Title handled at app level
-    _ => const SizedBox.shrink(), // Unknown element type
-  };
+        HeadingElement() => Heading(
+            text: element.text,
+            level: element.level,
+          ),
+        ParagraphElement() => Paragraph(text: element.text),
+        CodeBlockElement() => CodeBlock(text: element.text),
+        ReferenceElement() => Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Reference(
+                text: element.text,
+                url: element.url,
+                onTap: () => widget.navigate(element.url, true),
+              ),
+              const SizedBox(height: 4),
+            ],
+          ),
+        LineBreakElement() => const SizedBox(height: 8),
+        SeparatorElement() => const Divider(color: Colors.black),
+        UnorderedListElement() => UnorderedList(items: element.items),
+        OrderedListElement() => OrderedList(items: element.items),
+        TableElement() => ContentTable(element: element),
+        AnchorElement() => const SizedBox.shrink(),
+        TitleElement() => const SizedBox.shrink(), // Title handled at app level
+        _ => const SizedBox.shrink(), // Unknown element type
+      };
 }

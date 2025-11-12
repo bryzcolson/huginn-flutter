@@ -18,7 +18,8 @@ class CodeBlock extends StatelessWidget {
         padding: RendererTheme.codeBlockPadding,
         decoration: BoxDecoration(
           color: RendererTheme.codeBackgroundColor,
-          borderRadius: BorderRadius.circular(RendererTheme.codeBlockBorderRadius),
+          borderRadius:
+              BorderRadius.circular(RendererTheme.codeBlockBorderRadius),
         ),
         child: Text(text, style: RendererTheme.codeTextStyle),
       );
@@ -37,12 +38,12 @@ class Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: RendererTheme.headingVerticalPadding,
-    child: Text(
-      text,
-      style: RendererTheme.getHeadingStyle(level),
-    ),
-  );
+        padding: RendererTheme.headingVerticalPadding,
+        child: Text(
+          text,
+          style: RendererTheme.getHeadingStyle(level),
+        ),
+      );
 }
 
 /// Displays a paragraph of text
@@ -53,9 +54,9 @@ class Paragraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: RendererTheme.paragraphVerticalPadding,
-    child: Text(text, style: RendererTheme.baseTextStyle),
-  );
+        padding: RendererTheme.paragraphVerticalPadding,
+        child: Text(text, style: RendererTheme.baseTextStyle),
+      );
 }
 
 /// Displays a clickable reference/link with hover effect
@@ -80,23 +81,23 @@ class _ReferenceState extends State<Reference> {
 
   @override
   Widget build(BuildContext context) => MouseRegion(
-    cursor: SystemMouseCursors.click,
-    onEnter: (_) => setState(() => _isHovered = true),
-    onExit: (_) => setState(() => _isHovered = false),
-    child: GestureDetector(
-      onTap: widget.onTap,
-      child: Container(
-        color: _isHovered
-          ? RendererTheme.hoverBackgroundColor
-          : Colors.transparent,
-        padding: RendererTheme.referencePadding,
-        child: Text(
-          widget.text,
-          style: RendererTheme.linkTextStyle,
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: Container(
+            color: _isHovered
+                ? RendererTheme.hoverBackgroundColor
+                : Colors.transparent,
+            padding: RendererTheme.referencePadding,
+            child: Text(
+              widget.text,
+              style: RendererTheme.linkTextStyle,
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 }
 
 /// Displays an unordered (bulleted) list
@@ -107,28 +108,31 @@ class UnorderedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: RendererTheme.listVerticalPadding,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: items
-        .map((itemText) => Padding(
-          padding: RendererTheme.listItemPadding,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                RendererTheme.listItemBullet,
-                style: RendererTheme.baseTextStyle,
-              ),
-              Expanded(
-                child: Text(itemText, style: RendererTheme.baseTextStyle),
-              ),
-            ],
-          ),
+        padding: RendererTheme.listVerticalPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: items
+              .map(
+                (itemText) => Padding(
+                  padding: RendererTheme.listItemPadding,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        RendererTheme.listItemBullet,
+                        style: RendererTheme.baseTextStyle,
+                      ),
+                      Expanded(
+                        child:
+                            Text(itemText, style: RendererTheme.baseTextStyle),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
         ),
-      ).toList(),
-    ),
-  );
+      );
 }
 
 /// Displays an ordered (numbered) list
@@ -139,34 +143,30 @@ class OrderedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: RendererTheme.listVerticalPadding,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: items
-        .asMap()
-        .entries
-        .map((entry) {
-          final index = entry.key;
-          final itemText = entry.value;
-          return Padding(
-            padding: RendererTheme.listItemPadding,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${index + 1}. ',
-                  style: RendererTheme.baseTextStyle,
-                ),
-                Expanded(
-                  child: Text(itemText, style: RendererTheme.baseTextStyle),
-                ),
-              ],
-            ),
-          );
-        }
-      ).toList(),
-    ),
-  );
+        padding: RendererTheme.listVerticalPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: items.asMap().entries.map((entry) {
+            final index = entry.key;
+            final itemText = entry.value;
+            return Padding(
+              padding: RendererTheme.listItemPadding,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${index + 1}. ',
+                    style: RendererTheme.baseTextStyle,
+                  ),
+                  Expanded(
+                    child: Text(itemText, style: RendererTheme.baseTextStyle),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      );
 }
 
 /// Displays a data table with headers and rows
@@ -185,8 +185,8 @@ class ContentTable extends StatelessWidget {
         TableRow(
           decoration: const BoxDecoration(color: Colors.white),
           children: headerRow
-            .map((cell) => TableCell(text: cell, isHeader: true))
-            .toList(),
+              .map((cell) => TableCell(text: cell, isHeader: true))
+              .toList(),
         ),
       );
     }
@@ -196,8 +196,8 @@ class ContentTable extends StatelessWidget {
       allRows.add(
         TableRow(
           children: dataRow
-            .map((cell) => TableCell(text: cell, isHeader: false))
-            .toList(),
+              .map((cell) => TableCell(text: cell, isHeader: false))
+              .toList(),
         ),
       );
     }
@@ -228,12 +228,12 @@ class TableCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: RendererTheme.tableCellPadding,
-    child: Text(
-      text,
-      style: RendererTheme.baseTextStyle.copyWith(
-        fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-      ),
-    ),
-  );
+        padding: RendererTheme.tableCellPadding,
+        child: Text(
+          text,
+          style: RendererTheme.baseTextStyle.copyWith(
+            fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      );
 }

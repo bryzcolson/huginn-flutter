@@ -34,7 +34,6 @@ class _BrowserState extends State<Browser> {
   }
 
   Future<void> navigate(String url, bool modifyHistory) async {
-
     try {
       final status = await _client.preflight(url);
       String newContent;

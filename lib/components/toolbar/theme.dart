@@ -50,6 +50,7 @@ class ToolbarTheme {
   }
 
   /// Get button icon color based on enabled state
-  static Color getButtonIconColor(bool enabled) =>
-      enabled ? buttonIconColor : buttonIconColor.withValues(alpha: buttonDisabledOpacity);
+  static Color getButtonIconColor(bool enabled) => enabled
+      ? buttonIconColor
+      : buttonIconColor.withValues(alpha: buttonDisabledOpacity);
 }

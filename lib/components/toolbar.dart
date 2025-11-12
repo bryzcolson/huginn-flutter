@@ -67,44 +67,44 @@ class _ToolbarState extends State<Toolbar> {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: ToolbarTheme.toolbarHeight,
-    padding: ToolbarTheme.toolbarPadding,
-    decoration: const BoxDecoration(
-      color: ToolbarTheme.toolbarBackgroundColor,
-      boxShadow: ToolbarTheme.toolbarShadow,
-    ),
-    child: Row(
-      children: [
-        ToolbarButton(
-          icon: ToolbarConstants.backIcon,
-          enabled: widget.canBack,
-          onPressed: widget.onBack,
-          tooltip: ToolbarConstants.backTooltip,
+        height: ToolbarTheme.toolbarHeight,
+        padding: ToolbarTheme.toolbarPadding,
+        decoration: const BoxDecoration(
+          color: ToolbarTheme.toolbarBackgroundColor,
+          boxShadow: ToolbarTheme.toolbarShadow,
         ),
-        ToolbarButton(
-          icon: ToolbarConstants.forwardIcon,
-          enabled: widget.canNext,
-          onPressed: widget.onNext,
-          tooltip: ToolbarConstants.forwardTooltip,
+        child: Row(
+          children: [
+            ToolbarButton(
+              icon: ToolbarConstants.backIcon,
+              enabled: widget.canBack,
+              onPressed: widget.onBack,
+              tooltip: ToolbarConstants.backTooltip,
+            ),
+            ToolbarButton(
+              icon: ToolbarConstants.forwardIcon,
+              enabled: widget.canNext,
+              onPressed: widget.onNext,
+              tooltip: ToolbarConstants.forwardTooltip,
+            ),
+            ToolbarButton(
+              icon: ToolbarConstants.refreshIcon,
+              enabled: widget.canRefresh,
+              onPressed: widget.onRefresh,
+              tooltip: ToolbarConstants.refreshTooltip,
+            ),
+            AddressBar(
+              address: widget.addr,
+              onAddressChanged: _handleAddressChanged,
+              onNavigate: widget.onNavigate,
+            ),
+            ToolbarButton(
+              icon: ToolbarConstants.goIcon,
+              enabled: _hasText,
+              onPressed: _handleGo,
+              tooltip: ToolbarConstants.goTooltip,
+            ),
+          ],
         ),
-        ToolbarButton(
-          icon: ToolbarConstants.refreshIcon,
-          enabled: widget.canRefresh,
-          onPressed: widget.onRefresh,
-          tooltip: ToolbarConstants.refreshTooltip,
-        ),
-        AddressBar(
-          address: widget.addr,
-          onAddressChanged: _handleAddressChanged,
-          onNavigate: widget.onNavigate,
-        ),
-        ToolbarButton(
-          icon: ToolbarConstants.goIcon,
-          enabled: _hasText,
-          onPressed: _handleGo,
-          tooltip: ToolbarConstants.goTooltip,
-        ),
-      ],
-    ),
-  );
+      );
 }
