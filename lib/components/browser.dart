@@ -1,104 +1,105 @@
 import 'package:flutter/material.dart';
 import '../utils/client.dart';
+import 'browser/constants.dart';
+import 'browser/error_builder.dart';
+import 'browser/navigation_controller.dart';
 import 'toolbar.dart';
 import 'renderer.dart';
 
 class Browser extends StatefulWidget {
   final List<String> history;
-  
+
   const Browser({super.key, required this.history});
-  
+
   @override
   State<Browser> createState() => _BrowserState();
 }
 
 class _BrowserState extends State<Browser> {
-  late List<String> _history;
-  int _pos = -1;
+  late final NavigationController _navController;
   String _content = '';
   String _addr = '';
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _history = List.from(widget.history);
+    _navController = NavigationController(widget.history);
   }
 
   Future<void> navigate(String url, bool modifyHistory) async {
+    setState(() => _isLoading = true);
+
     try {
       final res = await OdinClient.preflight(url);
-      
-      if (res == 'A') {
-        try {
-          final content = await OdinClient.pull(url);
-          setState(() {
-            _content = content;
-          });
-        } catch (e) {
-          setState(() {
-            _content = 't\tOdin Error E\nh1\tOdin Error E\np\tServer request error';
-          });
-        }
-      } else if (res == 'B') {
-        setState(() {
-          _content = 't\tOdin Error B\nh1\tOdin Error B\np\tFile not found';
-        });
-      } else if (res == 'C') {
-        setState(() {
-          _content = 't\tOdin Error C\nh1\tOdin Error C\np\tMalformed request';
-        });
-      } else {
-        setState(() {
-          _content = 't\tOdin Error D\nh1\tOdin Error D\np\tServer request error';
-        });
+      String newContent;
+
+      switch (res) {
+        case BrowserConstants.responseSuccess:
+          try {
+            newContent = await OdinClient.pull(url);
+          } catch (e) {
+            newContent = ErrorBuilder.buildServerError();
+          }
+          break;
+
+        case BrowserConstants.responseNotFound:
+          newContent = ErrorBuilder.buildNotFoundError();
+          break;
+
+        case BrowserConstants.responseMalformed:
+          newContent = ErrorBuilder.buildMalformedError();
+          break;
+
+        default:
+          newContent = ErrorBuilder.buildServerError();
+          break;
+      }
+
+      setState(() {
+        _content = newContent;
+        _addr = url;
+        _isLoading = false;
+      });
+
+      if (modifyHistory) {
+        setState(() => _navController.navigateTo(url));
       }
     } catch (e) {
       setState(() {
-        _content = 't\tOdin Error D\nh1\tOdin Error D\np\tServer request error';
+        _content = ErrorBuilder.buildServerError();
+        _addr = url;
+        _isLoading = false;
       });
     }
-    
-    if (modifyHistory) {
-      setState(() {
-        _history = _history.sublist(0, _pos + 1)..add(url);
-        _pos++;
-      });
-    }
-    
-    setState(() {
-      _addr = url;
-    });
   }
 
   void _back() {
-    if (_pos > 0) {
-      navigate(_history[_pos - 1], false);
-      setState(() {
-        _pos--;
-      });
+    final url = _navController.goBack();
+    if (url != null) {
+      navigate(url, false);
     }
   }
 
   void _next() {
-    if (_pos < _history.length - 1) {
-      navigate(_history[_pos + 1], false);
-      setState(() {
-        _pos++;
-      });
+    final url = _navController.goForward();
+    if (url != null) {
+      navigate(url, false);
     }
   }
 
   void _refresh() {
-    if (_pos > -1) {
-      navigate(_history[_pos], false);
+    final url = _navController.getRefreshUrl();
+    if (url != null) {
+      navigate(url, false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final canBack = _pos > 0;
-    final canNext = _pos < _history.length - 1;
-    final canRefresh = _pos > -1;
+    final canBack = _navController.canGoBack;
+    final canNext = _navController.canGoForward;
+    final canRefresh = _navController.canRefresh;
 
     return Container(
       color: const Color(0xFFFAFAFA),

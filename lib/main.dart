@@ -29,15 +29,13 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Huginn',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'SF Mono',
-      ),
-      home: const Browser(history: []),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+    title: 'Huginn',
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+      fontFamily: 'SF Mono',
+    ),
+    home: const Browser(history: []),
+  );
 }
